@@ -1,8 +1,8 @@
 /*these values are defined by the 3D space construction tools.*/
 const mapInformation = [
-  [-1, -1, -1],
-  ["#02", "#01", "#03"],
-  [-1, "#04", -1],
+  [-1, "#01", -1, "#02", -1],
+  ["#03", "#04", "#05", "#06", "#07"],
+  ["#08", -1, -1, -1, "#09"],
 ];
 let currentPosition = [1, 1];
 /**************************************************************/
@@ -21,6 +21,10 @@ function zeroPadding(NUM, LEN) {
   return (Array(LEN).join("0") + NUM).slice(-LEN);
 }
 
+function makeAreaName(x, y){
+  return "area" + zeroPadding(x, MAP_LENGTH_DIGIT) + zeroPadding(y, MAP_LENGTH_DIGIT);
+}
+
 function displayMiniMap(mapArray) {
   //prettier-ignore
   //document.getElementById("image-360").setAttribute("src", mapInformation[currentPosition[0]][currentPosition[1]]);
@@ -30,14 +34,14 @@ function displayMiniMap(mapArray) {
       /**make area***********/
       let newElement = document.createElement("div");
       //prettier-ignore
-      newElement.id = "area" + zeroPadding(i, MAP_LENGTH_DIGIT) + zeroPadding(j, MAP_LENGTH_DIGIT);
+      newElement.id = makeAreaName(i, j);
       newElement.style.top = 20 + i * 50 + "px";
       newElement.style.left = 20 + j * 50 + "px";
+      newElement.classList.add("nothingArea");
       /*area drawing*********/
-      if (mapArray[i][j] < 0) newElement.classList.add("nothingArea");
-      else if (i === currentPosition[0] && j === currentPosition[1])
+      if (i === currentPosition[0] && j === currentPosition[1])
         newElement.classList.add("currentArea");
-      else newElement.classList.add("newArea");
+      else if (mapArray[i][j] !== -1) newElement.classList.add("newArea");
       /**********************/
       parentDiv.appendChild(newElement);
     }
@@ -80,7 +84,7 @@ AFRAME.registerComponent("move-on-map", {
   moveArea: function (str) {
     /**change color: current -> visited */
     //prettier-ignore
-    let currentDiv = document.getElementById("area" + zeroPadding(currentPosition[0], MAP_LENGTH_DIGIT) + zeroPadding(currentPosition[1], MAP_LENGTH_DIGIT));
+    let currentDiv = document.getElementById(makeAreaName(...currentPosition));
     currentDiv.classList.add("visitedArea");
     /**move area */
     if (str === "front-arrow") currentPosition[0]--;
@@ -90,14 +94,14 @@ AFRAME.registerComponent("move-on-map", {
 
     if (
       currentPosition[0] < 0 ||
-      currentPosition[0] >= MAP_LENGTH ||
+      currentPosition[0] >= mapInformation.length ||
       currentPosition[1] < 0 ||
-      currentPosition[1] >= MAP_LENGTH
+      currentPosition[1] >= mapInformation[currentPosition[0]].length
     )
       console.error("ERROR! You jumped off the map!\n");
     /**change color: new (or visited) -> current */
     //prettier-ignore
-    currentDiv = document.getElementById("area" + zeroPadding(currentPosition[0], MAP_LENGTH_DIGIT) + zeroPadding(currentPosition[1], MAP_LENGTH_DIGIT));
+    currentDiv = document.getElementById(makeAreaName(...currentPosition));
     currentDiv.classList.remove("visitedArea");
     currentDiv.classList.add("currentArea");
   },
