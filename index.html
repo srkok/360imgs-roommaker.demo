@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Title will appear here</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-template-component@3.x.x/dist/aframe-template-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
+    <script src="./js/move-map.component.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+    <script id="plane" type="text/html">
+      <a-entity
+        class="link"
+        geometry="primitive: triangle"
+        material="shader: flat; color:green"
+        event-set__mouseenter="scale: 1.2 1.2 1"
+        event-set__mouseleave="scale: 1 1 1"
+      ></a-entity>
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <img id="01" src="./imgs/01.png" crossorigin="anonymous" />
+        <img id="02" src="./imgs/02.png" crossorigin="anonymous" />
+        <img id="03" src="./imgs/03.png" crossorigin="anonymous" />
+        <img id="04" src="./imgs/04.png" crossorigin="anonymous" />
+      </a-assets>
+
+      <a-sky
+        id="image-360"
+        radius="10"
+        animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
+        animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade"
+      ></a-sky>
+      <script>
+        //prettier-ignore
+        document.getElementById("image-360").setAttribute("src", mapInformation[currentPosition[0]][currentPosition[1]]);
+      </script>
+
+      <div id="miniMap"></div>
+      <script>
+        displayMiniMap(mapInformation);
+      </script>
+
+      <a-entity id="links" position="0 0 0" rotation="-90 0 0">
+        <a-entity
+          id="front-arrow"
+          position="0 2 0"
+          rotation="0 0 0"
+          template="src: #plane"
+          move-on-map
+        ></a-entity>
+        <a-entity
+          id="right-arrow"
+          position="2 0 0"
+          rotation="0 0 -90"
+          template="src: #plane"
+          move-on-map
+        ></a-entity>
+        <a-entity
+          id="left-arrow"
+          position="-2 0 0"
+          rotation="0 0 90"
+          template="src: #plane"
+          move-on-map
+        ></a-entity>
+        <a-entity
+          id="back-arrow"
+          position="0 -2 0"
+          rotation="0 0 180"
+          template="src: #plane"
+          move-on-map
+        ></a-entity>
+      </a-entity>
+
+      <!-- Camera + Cursor. -->
+      <a-camera wasd-controls-enabled="false">
+        <a-cursor
+          id="cursor"
+          animation__click="property: scale; from: 0.1 0.1 0.1; to: 1 1 1; easing: easeInCubic; dur: 150; startEvents: click"
+          animation__clickreset="property: scale; to: 0.1 0.1 0.1; dur: 1; startEvents: animationcomplete__click"
+          animation__fusing="property: scale; from: 1 1 1; to: 0.1 0.1 0.1; easing: easeInCubic; dur: 150; startEvents: fusing"
+        ></a-cursor>
+      </a-camera>
+    </a-scene>
+  </body>
+</html>

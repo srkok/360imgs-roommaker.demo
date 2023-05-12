@@ -1,0 +1,46 @@
+#miniMap {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: 320px;
+  height: 240px;
+  overflow: auto;
+  border: 1px solid #444444;
+  /*background-color: black;*/
+  z-index: 500;
+}
+.nothingArea {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  overflow: auto;
+  border: 1px solid #444444;
+  z-index: 999;
+}
+.newArea {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  overflow: auto;
+  border: 1px solid #444444;
+  background-color: skyblue;
+  z-index: 999;
+}
+.currentArea {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  overflow: auto;
+  border: 1px solid #444444;
+  background-color: red;
+  z-index: 999;
+}
+.visitedArea {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  overflow: auto;
+  border: 1px solid #444444;
+  background-color: orange;
+  z-index: 999;
+}
