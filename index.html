@@ -38,13 +38,13 @@
         animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
         animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade"
       ></a-sky>
-      <script>
+      <script defer>
         //prettier-ignore
         document.getElementById("image-360").setAttribute("src", mapInformation[currentPosition[0]][currentPosition[1]]);
       </script>
 
       <div id="miniMap"></div>
-      <script>
+      <script defer>
         displayMiniMap(mapInformation);
       </script>
 
