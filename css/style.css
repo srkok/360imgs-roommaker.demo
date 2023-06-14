@@ -6,19 +6,19 @@
   height: 240px;
   overflow: auto;
   border: 1px solid #444444;
-  /*background-color: black;*/
   z-index: 500;
 }
 .nothingArea {
   position: fixed;
-  width: 50px;
-  height: 50px;
+  /*width: 50px;
+  height: 50px;*/
   overflow: auto;
   border: 1px solid #444444;
   z-index: 999;
 }
 .newArea {
   background-color: skyblue;
+  cursor: pointer;
 }
 .currentArea {
   background-color: red;

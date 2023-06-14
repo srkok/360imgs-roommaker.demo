@@ -1,4 +1,12 @@
-/*these values are defined by the 3D space construction tools.*/
+/*these values are defined by the 3D space construction tools.*
+const mapInformation = [
+  [-1, -1, -1, -1, -1, -1, -1],
+  [-1, -1, "#01", -1, "#02", -1, -1],
+  [-1, "#03", "#04", "#05", "#06", "#07", -1],
+  [-1, "#08", -1, -1, -1, "#09", -1],
+  [-1, -1, -1, -1, -1, -1, -1],
+];
+let currentPosition = [2, 3];*/
 const mapInformation = [
   [-1, "#01", -1, "#02", -1],
   ["#03", "#04", "#05", "#06", "#07"],
@@ -8,6 +16,7 @@ let currentPosition = [1, 1];
 /**************************************************************/
 const MAP_LENGTH = maxDimension(mapInformation);
 const MAP_LENGTH_DIGIT = MAP_LENGTH.toString().length;
+const MAP_LENGTH_DISPLAY = 200 / MAP_LENGTH;
 
 function maxDimension(array) {
   return array.reduce(
@@ -21,27 +30,35 @@ function zeroPadding(NUM, LEN) {
   return (Array(LEN).join("0") + NUM).slice(-LEN);
 }
 
-function makeAreaName(x, y){
-  return "area" + zeroPadding(x, MAP_LENGTH_DIGIT) + zeroPadding(y, MAP_LENGTH_DIGIT);
+function makeAreaName(x, y) {
+  return (
+    "area" + zeroPadding(x, MAP_LENGTH_DIGIT) + zeroPadding(y, MAP_LENGTH_DIGIT)
+  );
+}
+
+function moveToClickedLocation(){
+  console.log(this.id);
 }
 
 function displayMiniMap(mapArray) {
-  //prettier-ignore
-  //document.getElementById("image-360").setAttribute("src", mapInformation[currentPosition[0]][currentPosition[1]]);
+  let parentDiv = document.getElementById("miniMap");
   for (let i = 0; i < mapArray.length; i++) {
     for (let j = 0; j < mapArray[i].length; j++) {
-      let parentDiv = document.getElementById("miniMap");
       /**make area***********/
       let newElement = document.createElement("div");
-      //prettier-ignore
       newElement.id = makeAreaName(i, j);
-      newElement.style.top = 20 + i * 50 + "px";
-      newElement.style.left = 20 + j * 50 + "px";
+      newElement.style.top = 20 + i * MAP_LENGTH_DISPLAY + "px";
+      newElement.style.left = 20 + j * MAP_LENGTH_DISPLAY + "px";
+      newElement.style.width = MAP_LENGTH_DISPLAY + "px";
+      newElement.style.height = MAP_LENGTH_DISPLAY + "px";
       newElement.classList.add("nothingArea");
       /*area drawing*********/
+      if (mapArray[i][j] !== -1){
+        newElement.classList.add("newArea");
+        newElement.addEventListener("click", moveToClickedLocation, false);
+      }
       if (i === currentPosition[0] && j === currentPosition[1])
         newElement.classList.add("currentArea");
-      else if (mapArray[i][j] !== -1) newElement.classList.add("newArea");
       /**********************/
       parentDiv.appendChild(newElement);
     }
@@ -83,7 +100,6 @@ AFRAME.registerComponent("move-on-map", {
   },
   moveArea: function (str) {
     /**change color: current -> visited */
-    //prettier-ignore
     let currentDiv = document.getElementById(makeAreaName(...currentPosition));
     currentDiv.classList.add("visitedArea");
     /**move area */
@@ -100,7 +116,6 @@ AFRAME.registerComponent("move-on-map", {
     )
       console.error("ERROR! You jumped off the map!\n");
     /**change color: new (or visited) -> current */
-    //prettier-ignore
     currentDiv = document.getElementById(makeAreaName(...currentPosition));
     currentDiv.classList.remove("visitedArea");
     currentDiv.classList.add("currentArea");
